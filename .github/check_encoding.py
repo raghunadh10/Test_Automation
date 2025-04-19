@@ -3,7 +3,7 @@ import os
 
 def is_windows1252_encoded(file_path):
     try:
-        with open(file_path, 'r', encoding='windows-1252') as f:
+        with open(file_path, 'r', encoding='Windows-1252') as f:
             f.read()
         return True
     except UnicodeDecodeError:

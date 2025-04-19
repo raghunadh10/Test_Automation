@@ -5,5 +5,5 @@ SELECT 'Hello'; -- Chinese characters
 SELECT 'RocketRock🚀🚀'; -- Emoji character
 🚀
 अ
-
+❌ ✅
 

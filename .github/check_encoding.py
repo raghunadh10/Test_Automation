@@ -18,12 +18,12 @@ def main():
             failed_files.append(file_path)
 
     if failed_files:
-        print("❌ The following files are not in Windows-1252 encoding:")
+        print("The following files are not in Windows-1252 encoding:")
         for file in failed_files:
             print(f"  - {file}")
         sys.exit(1)
     else:
-        print("✅ All files passed encoding check (Windows-1252).")
+        print("All files passed encoding check (Windows-1252).")
 
 if __name__ == "__main__":
     main()

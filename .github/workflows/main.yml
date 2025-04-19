@@ -1,0 +1,33 @@
+name: Validate Encoding Before Merge
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  encoding-check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.x
+
+    - name: Get changed files
+      id: files
+      run: |
+        echo "CHANGED_FILES=$(git diff --name-only origin/master...HEAD)" >> $GITHUB_ENV
+
+    - name: Run encoding check
+      run: |
+        echo "$CHANGED_FILES" | tr ' ' '\n' > changed_files.txt
+        FILES=$(cat changed_files.txt | grep -E '\.sql$|\.txt$|\.csv$|\.py$' || true)
+        if [ -z "$FILES" ]; then
+          echo "No relevant files to check."
+          exit 0
+        fi
+        python3 scripts/check_encoding.py $FILES

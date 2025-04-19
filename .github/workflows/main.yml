@@ -30,4 +30,4 @@ jobs:
           echo "No relevant files to check."
           exit 0
         fi
-        python3 scripts/check_encoding.py $FILES
+        python3 check_encoding.py $FILES

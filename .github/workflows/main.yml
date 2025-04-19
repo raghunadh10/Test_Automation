@@ -3,6 +3,7 @@ name: Validate Encoding Before Merge
 on:
   pull_request:
     branches: [ master ]
+    types: [opened,synchronize, reopened]
 
 jobs:
   encoding-check:

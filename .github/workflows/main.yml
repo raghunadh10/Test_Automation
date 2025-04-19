@@ -3,6 +3,7 @@ name: Validate Encoding Before Merge
 on:
   pull_request:
     branches: [ master ]
+    types: [opened,synchronize, reopened]
 
 jobs:
   encoding-check:
@@ -11,6 +12,10 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - name: Fetch base branch
+      run: git fetch origin master
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -20,7 +25,10 @@ jobs:
     - name: Get changed files
       id: files
       run: |
-        echo "CHANGED_FILES=$(git diff --name-only origin/master...HEAD)" >> $GITHUB_ENV
+        #echo "CHANGED_FILES=$(git diff --name-only origin/master...HEAD)" >> $GITHUB_ENV
+        echo "CHANGED_FILES<<EOF" >> $GITHUB_ENV
+        git diff --name-only origin/master...HEAD >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
 
     - name: Run encoding check
       run: |
@@ -30,4 +38,4 @@ jobs:
           echo "No relevant files to check."
           exit 0
         fi
-        python3 check_encoding.py $FILES
+        python3 .github/check_encoding.py $FILES

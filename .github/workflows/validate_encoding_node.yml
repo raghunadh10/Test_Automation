@@ -33,5 +33,5 @@ jobs:
           echo "$CHANGED_FILES" | tr ' ' '\n' > changed_files.txt
           while IFS= read -r file; do
             echo "Checking encoding of $file..."
-            node .github/encoding-check.js "$file"
+            node .github/encoding_check.js "$file"
           done < changed_files.txt

@@ -26,8 +26,10 @@ jobs:
       - name: Get changed files
         id: changed-files
         run: |
-          echo "CHANGED_FILES=$(git diff --name-only origin/master...HEAD | grep -E '\.csv$|\.txt$|\.sql$|\.py$' | tr '\n' ' ')" >> $GITHUB_ENV
-
+          echo "CHANGED_FILES<<EOF" >> $GITHUB_ENV
+          git diff --name-only origin/master...HEAD >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          
       - name: Run encoding check with Node.js
         run: |
           echo "$CHANGED_FILES" | tr ' ' '\n' > changed_files.txt

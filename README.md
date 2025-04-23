@@ -137,7 +137,7 @@ The `pom.xml` file manages dependencies such as:
 - Log4j for logging
 
 ---
-## Screenshot Mechanism
+## Error Screenshot Mechanism
 
 <img width="1354" alt="image" src="https://github.com/user-attachments/assets/f3ac141c-e423-453c-bd24-0d4c55c37e83" />
 

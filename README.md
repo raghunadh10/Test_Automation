@@ -142,6 +142,15 @@ The `pom.xml` file manages dependencies such as:
 <img width="1354" alt="image" src="https://github.com/user-attachments/assets/f3ac141c-e423-453c-bd24-0d4c55c37e83" />
 
 ---
+## Allure-Reporting Mechanism
+
+After the tests are run,use the below command to generate the report .Make sure allure is installed on your system.
+
+```sh
+   allure serve
+```
+<img width="1470" alt="image" src="https://github.com/user-attachments/assets/fa6a8ea8-1f2f-424c-84c8-9afc3767f4b9" />
+
 ## Conclusion
 This automation framework provides an efficient way to execute UI tests using **Cucumber BDD, TestNG, and Selenium**.  
 For any improvements or contributions, feel free to create a pull request.

@@ -2,6 +2,6 @@
 -- It contains characters not supported in Windows-1252
 
 SELECT 'Hello'; -- Chinese characters
-SELECT '*abcade Sfgh, "a = à*;'; -- Emoji character
+SELECT '*abcade S木馬 / 马'; -- Emoji character
 ✅
 

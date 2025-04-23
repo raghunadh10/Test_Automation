@@ -19,7 +19,7 @@ def is_valid_filename(filename):
         return bool(v_script_pattern.match(filename))
     elif filename.startswith('r'):
         return bool(r_script_pattern.match(filename))
-    return True  # For non v/r scripts, skip naming check
+    return False  # For non v/r scripts, skip naming check
 
 def main():
     encoding_failed_files = []

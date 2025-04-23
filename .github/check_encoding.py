@@ -3,7 +3,7 @@ import os
 import re
 
 # Regex patterns
-v_script_pattern = re.compile(r'^v\d{14}__.+\.sql$', re.IGNORECASE)
+v_script_pattern = re.compile(r'^v\d{14}__[\w\-]+\.sql$', re.IGNORECASE)
 r_script_pattern = re.compile(r'^r__\w+\.\w+\.(pkb|pks)\.sql$', re.IGNORECASE)
 
 # Expected folder paths

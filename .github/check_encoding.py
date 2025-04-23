@@ -38,18 +38,18 @@ def main():
             encoding_failed_files.append(file_path)
 
     if naming_failed_files:
-        print("❌ The following files have invalid naming conventions:")
+        print("The following files have invalid naming conventions:")
         for file in naming_failed_files:
             print(f"  - {file}")
         sys.exit(2)
 
     if encoding_failed_files:
-        print("❌ The following files are not in Windows-1252 encoding:")
+        print("The following files are not in Windows-1252 encoding:")
         for file in encoding_failed_files:
             print(f"  - {file}")
         sys.exit(1)
 
-    print("✅ All files passed encoding and naming checks.")
+    print("All files passed encoding and naming checks.")
 
 if __name__ == "__main__":
     main()

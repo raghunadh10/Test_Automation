@@ -149,7 +149,12 @@ After the tests are run,use the below command to generate the report .Make sure 
 ```sh
    allure serve
 ```
-<img width="1470" alt="image" src="https://github.com/user-attachments/assets/fa6a8ea8-1f2f-424c-84c8-9afc3767f4b9" />
+<img width="1470" alt="image" src="https://github.com/user-attachments/assets/26e0ece9-1cea-4611-b069-d97a7c864e30" />
+
+---
+
+<img width="1467" alt="image" src="https://github.com/user-attachments/assets/abb8ee24-21f6-4c20-92ac-ab64df05a1e5" />
+
 
 ## Conclusion
 This automation framework provides an efficient way to execute UI tests using **Cucumber BDD, TestNG, and Selenium**.  

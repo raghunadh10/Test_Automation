@@ -137,11 +137,11 @@ The `pom.xml` file manages dependencies such as:
 - Log4j for logging
 
 ---
-##Screenshot Mechanism
+## Screenshot Mechanism
 
 <img width="1354" alt="image" src="https://github.com/user-attachments/assets/f3ac141c-e423-453c-bd24-0d4c55c37e83" />
 
-
+---
 ## Conclusion
 This automation framework provides an efficient way to execute UI tests using **Cucumber BDD, TestNG, and Selenium**.  
 For any improvements or contributions, feel free to create a pull request.

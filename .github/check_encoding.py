@@ -20,19 +20,17 @@ def validate_naming_and_folder(file_path):
     issues = []
 
     filename = os.path.basename(file_path)
-    v_pattern = r'^v\\d{17}__.+\\.sql$'
-    r_pattern = r'^r\\d{17}__.+\\.sql$'
+    v_pattern = r'^v\d{17}__.+\.sql$'
+    r_pattern = r'^r\d{17}__.+\.sql$'
 
     if '/vscript/' in file_path.lower():
         if not re.match(v_pattern, filename):
             issues.append('❌ Invalid naming convention for v script')
-        if 'vscript' not in file_path.lower():
-            issues.append('❌ v script is not in the correct folder')
     elif '/rscript/' in file_path.lower():
         if not re.match(r_pattern, filename):
             issues.append('❌ Invalid naming convention for r script')
-        if 'rscript' not in file_path.lower():
-            issues.append('❌ r script is not in the correct folder')
+    else:
+        issues.append('❌ Script not in correct folder (vscript/ or rscript/)')
 
     return issues
 
@@ -64,27 +62,27 @@ def main():
                 blocked_modifications.append(file_path)
 
     if encoding_issues or naming_issues or blocked_modifications:
-        print(\"\\n❌ Validation failed with the following issues:\")
+        print("\n❌ Validation failed with the following issues:")
         if encoding_issues:
-            print(\"\\nEncoding Issues:\")
+            print("\nEncoding Issues:")
             for file in encoding_issues:
-                print(f\"  - {file} is not Windows-1252 encoded\")
+                print(f"  - {file} is not Windows-1252 encoded")
 
         if naming_issues:
-            print(\"\\nNaming/Folder Issues:\")
+            print("\nNaming/Folder Issues:")
             for file, issues in naming_issues:
-                print(f\"  - {file}\")
+                print(f"  - {file}")
                 for issue in issues:
-                    print(f\"     {issue}\")
+                    print(f"     {issue}")
 
         if blocked_modifications:
-            print(\"\\nBlocked vScript Modifications:\")
+            print("\nBlocked vScript Modifications:")
             for file in blocked_modifications:
-                print(f\"  - Modification not allowed: {file}\")
+                print(f"  - Modification not allowed: {file}")
 
         sys.exit(1)
     else:
-        print(\"\\n✅ All checks passed: encoding, naming, folder, and vScript rules.\")
+        print("\n✅ All checks passed: encoding, naming, folder, and vScript rules.")
 
-if __name__ == \"__main__\":
+if __name__ == "__main__":
     main()

@@ -14,8 +14,8 @@ def validate_naming_and_folder(file_path):
     issues = []
 
     filename = os.path.basename(file_path)
-    v_pattern = r'^v\d{17}__.+\.sql$'
-    r_pattern = r'^r\d{17}__.+\.sql$'
+    v_pattern = re.compile(r'^v\d{17}__.+\.sql$', re.IGNORECASE)
+    r_pattern = re.compile(r'^r__\w+\.\w+\.(pkb|pks)\.sql$', re.IGNORECASE)
 
     lower_path = file_path.lower()
 

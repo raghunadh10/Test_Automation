@@ -1,12 +1,6 @@
 import sys
 import os
 import re
-import chardet
-
-def detect_encoding(file_path):
-    with open(file_path, 'rb') as f:
-        result = chardet.detect(f.read())
-    return result.get('encoding')
 
 def is_windows1252_encoded(file_path):
     try:
@@ -23,10 +17,12 @@ def validate_naming_and_folder(file_path):
     v_pattern = r'^v\d{17}__.+\.sql$'
     r_pattern = r'^r\d{17}__.+\.sql$'
 
-    if '/vscript/' in file_path.lower():
+    lower_path = file_path.lower()
+
+    if '/vscript/' in lower_path:
         if not re.match(v_pattern, filename):
             issues.append('❌ Invalid naming convention for v script')
-    elif '/rscript/' in file_path.lower():
+    elif '/rscript/' in lower_path:
         if not re.match(r_pattern, filename):
             issues.append('❌ Invalid naming convention for r script')
     else:

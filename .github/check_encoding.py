@@ -52,11 +52,11 @@ def main():
         errors = []
         if not checks["encoding"]:
             errors.append("❌ Invalid encoding (not Windows-1252)")
-            break
-        if not checks["naming"]:
+        
+        elif not checks["naming"]:
             errors.append("❌ Invalid naming convention")
-            break
-        if not checks["folder"]:
+        
+        elif not checks["folder"]:
             errors.append("❌ Incorrect folder location")
         
     if errors:

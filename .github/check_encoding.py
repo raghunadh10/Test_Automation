@@ -2,6 +2,14 @@ import sys
 import os
 import re
 
+# Regex patterns
+v_script_pattern = re.compile(r'^v\d{17}__.+\.sql$', re.IGNORECASE)
+r_script_pattern = re.compile(r'^r__\w+\.\w+\.(pkb|pks)\.sql$', re.IGNORECASE)
+
+# Expected folder paths
+V_SCRIPT_FOLDER = os.path.normpath("clpss-db/DB/sql/Data")
+R_SCRIPT_FOLDER = os.path.normpath("clpss-db/DB/sql/Packages")
+
 def is_windows1252_encoded(file_path):
     try:
         with open(file_path, 'r', encoding='windows-1252') as f:
@@ -10,75 +18,58 @@ def is_windows1252_encoded(file_path):
     except UnicodeDecodeError:
         return False
 
-def validate_naming_and_folder(file_path):
-    issues = []
+def is_valid_filename(filename):
+    if filename.startswith('v'):
+        return bool(v_script_pattern.match(filename))
+    elif filename.startswith('r'):
+        return bool(r_script_pattern.match(filename))
+    return False
 
-    filename = os.path.basename(file_path)
-    v_pattern = re.compile(r'^v\d{17}__.+\.sql$', re.IGNORECASE)
-    r_pattern = re.compile(r'^r__\w+\.\w+\.(pkb|pks)\.sql$', re.IGNORECASE)
-
-    lower_path = file_path.lower()
-
-    if '/vscript/' in lower_path:
-        if not re.match(v_pattern, filename):
-            issues.append('❌ Invalid naming convention for v script')
-    elif '/rscript/' in lower_path:
-        if not re.match(r_pattern, filename):
-            issues.append('❌ Invalid naming convention for r script')
-    else:
-        issues.append('❌ Script not in correct folder (vscript/ or rscript/)')
-
-    return issues
-
-def is_modification_blocked_for_vscript(change_type, file_path):
-    return change_type == 'M' and '/vscript/' in file_path.lower()
+def is_valid_folder(file_path):
+    norm_path = os.path.normpath(file_path)
+    if os.path.basename(file_path).startswith('v'):
+        return V_SCRIPT_FOLDER in norm_path
+    elif os.path.basename(file_path).startswith('r'):
+        return R_SCRIPT_FOLDER in norm_path
+    return False
 
 def main():
-    encoding_issues = []
-    naming_issues = []
-    blocked_modifications = []
+    results = {}
 
-    with open('changed_files.txt', 'r') as f:
-        for line in f:
-            change_type, file_path = line.strip().split('\t')
-            if not os.path.isfile(file_path):
-                continue
+    for file_path in sys.argv[1:]:
+        if not os.path.isfile(file_path):
+            continue
 
-            # Encoding check
-            if not is_windows1252_encoded(file_path):
-                encoding_issues.append(file_path)
+        file_name = os.path.basename(file_path)
+        results[file_path] = {
+            "encoding": is_windows1252_encoded(file_path),
+            "naming": is_valid_filename(file_name),
+            "folder": is_valid_folder(file_path)
+        }
 
-            # Naming and folder check
-            issues = validate_naming_and_folder(file_path)
-            if issues:
-                naming_issues.append((file_path, issues))
+    failed = False
+    for file, checks in results.items():
+        errors = []
+        if not checks["encoding"]:
+            errors.append("❌ Invalid encoding (not Windows-1252)")
+            break
+        if not checks["naming"]:
+            errors.append("❌ Invalid naming convention")
+            break
+        if not checks["folder"]:
+            errors.append("❌ Incorrect folder location")
+        
+    if errors:
+        failed = True
+        print(f"\n❌ Issues found in file: {file}")
+        for error in errors:
+            print(f"   - {error}")
 
-            # vScript modification block
-            if is_modification_blocked_for_vscript(change_type, file_path):
-                blocked_modifications.append(file_path)
-
-    if encoding_issues or naming_issues or blocked_modifications:
-        print("\n❌ Validation failed with the following issues:")
-        if encoding_issues:
-            print("\nEncoding Issues:")
-            for file in encoding_issues:
-                print(f"  - {file} is not Windows-1252 encoded")
-
-        if naming_issues:
-            print("\nNaming/Folder Issues:")
-            for file, issues in naming_issues:
-                print(f"  - {file}")
-                for issue in issues:
-                    print(f"     {issue}")
-
-        if blocked_modifications:
-            print("\nBlocked vScript Modifications:")
-            for file in blocked_modifications:
-                print(f"  - Modification not allowed: {file}")
-
+    if failed:
+        print("\n⛔ One or more files failed validation checks.")
         sys.exit(1)
     else:
-        print("\n✅ All checks passed: encoding, naming, folder, and vScript rules.")
+        print("✅ All files passed encoding, naming, and folder location checks.")
 
 if __name__ == "__main__":
     main()

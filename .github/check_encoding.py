@@ -59,11 +59,11 @@ def main():
         elif not checks["folder"]:
             errors.append("❌ Incorrect folder location")
         
-    if errors:
-        failed = True
-        print(f"\n❌ Issues found in file: {file}")
-        for error in errors:
-            print(f"   - {error}")
+        if errors:
+            failed = True
+            print(f"\n❌ Issues found in file: {file}")
+            for error in errors:
+                print(f"   - {error}")
 
     if failed:
         print("\n⛔ One or more files failed validation checks.")

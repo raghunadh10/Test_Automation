@@ -29,6 +29,7 @@ jobs:
         echo "CHANGED_FILES<<EOF" >> $GITHUB_ENV
         git diff --name-status origin/master...HEAD >> $GITHUB_ENV
         echo "EOF" >> $GITHUB_ENV
+        echo $GITHUB_ENV
 
     - name: Run encoding check
       run: |

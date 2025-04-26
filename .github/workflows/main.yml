@@ -34,9 +34,11 @@ jobs:
     - name: Run encoding check
       run: |
         echo "$CHANGED_FILES" | tr ' ' '\n' > changed_files.txt
-        FILES=$(cat changed_files.txt | grep -E '\.sql$|\.txt$|\.csv$|\.py$' || true)
+        # Extract filenames only (ignoring status for $FILES)
+        FILES=$(awk '$2 ~ /\.(sql|txt|csv|py)$/' changed_files.txt | awk '{print $2}' || true)
+        STATUS_FILES=$(awk '$2 ~ /\.(sql|txt|csv|py)$/' changed_files.txt || true)
         if [ -z "$FILES" ]; then
           echo "No relevant files to check."
           exit 0
         fi
-        python3 .github/check_encoding.py $FILES
+        python3 .github/check_encoding.py $FILES --status-files "$STATUS_FILES"

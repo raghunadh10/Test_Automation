@@ -40,6 +40,7 @@ def main():
         if not os.path.isfile(file_path):
             continue
 
+        print(file_path,"raghu")
         file_name = os.path.basename(file_path)
         results[file_path] = {
             "encoding": is_windows1252_encoded(file_path),

@@ -1,6 +1,7 @@
 import sys
 import os
 import re
+import argparse
 
 # Regex patterns
 v_script_pattern = re.compile(r'^v\d{17}__.+\.sql$', re.IGNORECASE)
@@ -33,22 +34,47 @@ def is_valid_folder(file_path):
         return R_SCRIPT_FOLDER in norm_path
     return False
 
-def main():
-    results = {}
+def parse_status_files(status_files_string):
+    status_dict = {}
+    if status_files_string:
+        lines = status_files_string.strip().split('\n')
+        for line in lines:
+            status, filename = line.strip().split(maxsplit=1)
+            status_dict[filename] = status
+    return status_dict
 
-    for file_path in sys.argv[1:]:
+def main():
+    parser = argparse.ArgumentParser(description="Validate files for encoding, naming, folder, and status.")
+    parser.add_argument('files', nargs='+', help='List of changed files')
+    parser.add_argument('--status-files', type=str, help='String containing file status and name')
+
+    args = parser.parse_args()
+    status_dict = parse_status_files(args.status_files) if args.status_files else {}
+
+    results = {}
+    failed = False
+
+    for file_path in args.files:
+        file_name = os.path.basename(file_path)
+        status = status_dict.get(file_path, "Unknown")
+
+        # If file is Modified ('M'), fail immediately
+        if status == "M":
+            print(f"\n⛔ File '{file_path}' is Modified (M). Modifications are not allowed.")
+            failed = True
+            continue  # skip further validation for this file
+
         if not os.path.isfile(file_path):
+            print(f"Skipping non-existent file: {file_path}")
             continue
 
-        print(file_path,"raghu")
-        file_name = os.path.basename(file_path)
         results[file_path] = {
             "encoding": is_windows1252_encoded(file_path),
             "naming": is_valid_filename(file_name),
             "folder": is_valid_folder(file_path)
         }
 
-    failed = False
+    # Now check encoding, naming, folder validations
     for file, checks in results.items():
         errors = []
         if not checks["encoding"]:
@@ -70,7 +96,7 @@ def main():
         print("\n⛔ One or more files failed validation checks.")
         sys.exit(1)
     else:
-        print("✅ All files passed encoding, naming, and folder location checks.")
+        print("\n✅ All files passed encoding, naming, folder location, and status checks.")
 
 if __name__ == "__main__":
     main()

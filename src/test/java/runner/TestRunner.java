@@ -15,9 +15,9 @@ import org.junit.runner.RunWith;
                 "json:target/cucumber-reports/cucumber.json",  // Generates JSON reports
                 "junit:target/cucumber-reports/cucumber.xml"  // Generates JUnit XML reports
         },
-        monochrome = true, // Clear console output
+        monochrome = false, // Clear console output
         dryRun = false, // Set to 'true' to check step definitions without execution
-        tags = "@test"  // Run only scenarios with this tag
+        tags = "@test1"  // Run only scenarios with this tag
 )
 public class TestRunner {
 }

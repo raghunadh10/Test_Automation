@@ -4,7 +4,8 @@ Feature: Facebook wesbsite testing
   @testing1 @regression
   Scenario: Login test
     Given i open a google web browser
-    Then i enter youtube in search bar and click
+    #Then i enter youtube in search bar and click
+    Then i switch to iframe1
     Then i will close the driver
 
 #  @testing2

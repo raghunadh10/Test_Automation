@@ -1,0 +1,39 @@
+name: Validate Encoding Before Merge (Node.js)
+
+on:
+  pull_request:
+    branches: [ master ]
+    types: [opened, synchronize, reopened]
+
+jobs:
+  encoding-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install iconv-lite
+
+      - name: Get changed files
+        id: changed-files
+        run: |
+          echo "CHANGED_FILES<<EOF" >> $GITHUB_ENV
+          git diff --name-only origin/master...HEAD >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          
+      - name: Run encoding check with Node.js
+        run: |
+          echo "$CHANGED_FILES" | tr ' ' '\n' > changed_files.txt
+          while IFS= read -r file; do
+            echo "Checking encoding of $file..."
+            node .github/encoding_check.js "$file"
+          done < changed_files.txt

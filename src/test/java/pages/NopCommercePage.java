@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.annotations.BeforeMethod;
+import utilities.DriverFactory;
 
 import java.util.List;
 
@@ -74,6 +75,7 @@ public class NopCommercePage {
 
     public void enableAdvancedSearch() {
         WebElement checkbox = driver.findElement(advancedSearchCheckbox);
+
         if (!checkbox.isSelected()) {
             checkbox.click();
         }
